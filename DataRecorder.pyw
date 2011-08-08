@@ -12,6 +12,8 @@ import os
 from serial import *
 from glob import glob
 from ZeoRawData import BaseLink, Parser
+#import DynamicAlarm
+from DynamicAlarm import *
 
 def scanPorts():
     portList = []
@@ -143,10 +145,13 @@ if __name__ == '__main__':
     output = ZeoToCSV()
     link = BaseLink.BaseLink(portStr)
     parser = Parser.Parser()
+    alarm = DynamicAlarm()
     # Add callbacks
     link.addCallback(parser.update)
     parser.addEventCallback(output.updateEvent)
     parser.addSliceCallback(output.updateSlice)
+    parser.addEventCallback(alarm.updateEvent)
+    parser.addSliceCallback(alarm.updateSlice)
     # Start Link
     link.start()
     
